@@ -1,0 +1,1 @@
+run="node_modules/.bin/node dist/index.js"
