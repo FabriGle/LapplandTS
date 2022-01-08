@@ -2,3 +2,5 @@
 /database/
 /WARNING.md
 /.breakpoints
+/.upm/
+/node_modules/

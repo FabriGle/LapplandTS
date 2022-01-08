@@ -1,4 +1,4 @@
-var app:any=require('express')(),colors:any=require('colors')
+var app:any=require('express')()
 app
 	.set('json spaces', 2)
 	.get('/',(req:any,res:any)=>{
@@ -12,7 +12,7 @@ app
 		}
 	})
 })
-module.exports = () => {
+module.exports=()=>{
 	app.listen(3000,()=>console.log('Server ready'))
 	return!0
 }

@@ -1,5 +1,5 @@
 "use strict";
-var app = require('express')(), colors = require('colors');
+var app = require('express')();
 app
     .set('json spaces', 2)
     .get('/', (req, res) => {

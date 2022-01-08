@@ -8,50 +8,69 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('eval')
-        .setDescription('Evaluate a code')
-        .addStringOption((option) => option
-        .setName('code')
-        .setDescription('The code to be evaluated')
-        .setRequired(true))
-        .addBooleanOption((option) => option
-        .setName('ephemeral')
-        .setDescription('Return in ephemeral?')
-        .setRequired(false))
-        .addBooleanOption((option) => option
-        .setName('codeblock')
-        .setDescription('If the return will be in codeblock or not')
-        .setRequired(false)),
+    name: 'eval',
+    desc: 'Evaluate javascript code',
+    options: [{ name: 'noembed', desc: 'Makes the return not embed' }],
+    fields: [{ name: 'code', opt: !1 }],
     run: (d) => __awaiter(void 0, void 0, void 0, function* () {
-        if (d.int.user.id !== '788869971073040454')
-            return d.int.replt({ content: 'This command is for my developers only' });
-        var evaled = 'undefined', depth = 0;
+        if (!['735170692915396698', '788869971073040454'].includes(d.author.id))
+            return d.msg.reply('This command is for my developers only');
+        d.suppressUpperCase = !0;
+        var Start = Date.now(), axios = require('axios'), dsc = require('discord.js'), http = require('http'), https = require('https'), fs = require('fs'), path = require('path'), cld = require('child_process'), exec = (data) => __awaiter(void 0, void 0, void 0, function* () { return yield cld.execSync(data); }), os = require('os'), cpu = os.cpus()[0], x = null, y = null, z = null, str = new String(), arr = new Array(), obj = new Object(), num = new Number();
+        var evaled = 'undefined', depth = 0, embed = {}, ne = d.args.includes('--noembed');
         try {
-            evaled = yield eval(d.int.options.getString('code'));
+            ne ? (d.removeArg('--noembed'), evaled = eval(`(async()=>${d.str_args})()`)) : evaled = yield eval(`(async()=>${d.str_args})()`);
         }
         catch (error) {
-            return d.int.reply({
-                embeds: [
+            var embedError = d.util.makeError(d, `Reason: ${error.message}`, error.name);
+            var row = {
+                type: 1,
+                components: [
                     {
-                        title: 'Error',
-                        thumbnail: { url: d.int.user.displayAvatarURL({ dynamic: true, size: 4096 }) },
-                        description: `\`\`\`bash\n${error.stack}\n\`\`\``,
-                        color: '#CC0000'
+                        label: 'View stack',
+                        type: 2,
+                        style: 1,
+                        customId: 'STACK_' + d.util.snowflake(),
+                        disabled: !1,
+                        emoji: null
                     }
                 ]
+            };
+            d.client.cache.set(row.components[0].customId, error.stack);
+            return d.msg.reply({ embeds: [embedError], components: [row] });
+        }
+        var to = typeof evaled;
+        if (to == 'object')
+            evaled = require('util').inspect(evaled, { depth: depth });
+        if (ne) {
+            return d.msg.reply({
+                content: `${evaled}` === 'undefined' ? 'Assessed correctly' : `${evaled}`
             });
         }
-        if (typeof evaled == 'object')
-            evaled = require('util').inspect(evaled, { depth: depth });
-        if (d.int.options.getBoolean('codeblock')) {
-            evaled = `\`\`\`ts\n${evaled}\`\`\``;
-        }
-        d.int.reply({
-            content: evaled || 'Assessed correctly',
-            ephemeral: d.int.options.getBoolean('ephemeral') || false
+        embed.title = `${d.emotes.tofu} | Eval`;
+        embed.thumbnail = { url: d.author.displayAvatarURL({ dynamic: !0, size: 4096 }) };
+        embed.fields = [
+            {
+                name: ':incoming_envelope: | input',
+                value: `\`\`\`ts\n${d.str_args}\n\`\`\``
+            },
+            {
+                name: ':page_facing_up: | output',
+                value: `\`\`\`ts\n${evaled}\n\`\`\``
+            },
+            {
+                name: ':card_box: | typeof',
+                value: `\`\`\`ts\n${to}\n\`\`\``
+            },
+            {
+                name: ':stopwatch: | execution time',
+                value: `\`\`\`ts\n${Date.now() - Start}Ms\n\`\`\``
+            }
+        ];
+        embed.color = '#001';
+        d.msg.reply({
+            embeds: [embed]
         });
     })
 };

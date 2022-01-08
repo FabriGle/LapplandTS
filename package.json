@@ -6,8 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Pavez",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^17.0.5",
     "node": "^17.3.0"
@@ -19,14 +19,26 @@
     "@discordjs/voice": "^0.7.5",
     "@distube/soundcloud": "^1.0.0",
     "@distube/spotify": "^1.0.0",
+    "axios": "^0.24.0",
     "bufferutil": "^4.0.5",
-    "colors": "^1.4.0",
     "dbdjs.db": "^2.0.2",
     "discord-api-types": "^0.26.0",
     "discord.js": "^13.4.0",
     "distube": "^3.0.5",
     "express": "^4.17.2",
+    "ffmpeg": "0.0.4",
+    "gd-browser-api": "^1.0.1",
+    "glob": "^7.2.0",
+    "libsodium-wrappers": "^0.7.9",
     "utf-8-validate": "^5.0.7"
   },
-  "description": ""
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pavez7274/LapplandTS.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Pavez7274/LapplandTS/issues"
+  },
+  "homepage": "https://github.com/Pavez7274/LapplandTS#readme",
+  "description": "Multipurpose bot made using TS"
 }
