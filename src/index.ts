@@ -1,18 +1,5 @@
 // Imports //
-var path=require('path')
-var{Client,Collection,BitField}=require('discord.js')
-var Config=require('./config.js')
-var client=new Client(Config.Bot)
-var slash:any=[]
-var{REST}=require('@discordjs/rest')
-var{Routes}=require('discord-api-types/v9')
-var rest=new REST({version:'9'}).setToken(process.env.token)
-var DisTube=require('distube')
-var Util=require('./Util')
-var glob=require('glob')
-var axios:any=require('axios')
-var cld:any=require('child_process'),exec:any=async(data:string)=>await cld.execSync(data)
-var os:any=require('os'),cpu:any=os.cpus()[0]
+var path=require('path'),{Client,Collection,BitField}=require('discord.js'),Config=require('./config.js'),client=new Client(Config.Bot),slash:any=[],{REST}=require('@discordjs/rest'),{Routes}=require('discord-api-types/v9'),rest=new REST({version:'9'}).setToken(process.env.token),DisTube=require('distube'),Util=require('./Util'),glob=require('glob'),axios:any=require('axios'),cld:any=require('child_process'),exec:any=async(data:string)=>await cld.execSync(data),os:any=require('os'),cpu:any=os.cpus()[0]
 require('./express')()
 // Imports //
 
@@ -42,7 +29,7 @@ client.slash=new Collection()
 console.log('|----------------[Slash]----------------|')
 glob.sync(path.join(__dirname,'/slash')+'/**/*.js').forEach((PATH:any)=>{
 	var Slash=require(PATH);client.slash.set(Slash.data.name,Slash);
-	console.log('|  Loaded\x1b[31m',Slash.data.name,`\x1b[2m[\x1b[0m\x1b[31m${PATH.split('/').reverse()[1]}\x1b[2m]\x1b[0m`);
+	console.log('|	loaded',Util.color.blue(Slash.data.name),`[${Util.color.red(PATH.split('/').reverse()[1])}]`)
 	slash.push(Slash.data.toJSON())
 })
 console.log('|---------------------------------------|')
@@ -52,8 +39,8 @@ console.log('|---------------------------------------|')
 client.commands=new Collection()
 console.log('\n|---------------[Command]---------------|')
 glob.sync(path.join(__dirname,'/commands')+'/**/*.js').forEach((PATH:any)=>{
-	var Cmd=require(PATH),C=PATH.split('/').reverse()[1];Cmd.category=C;client.commands.set(Util.random(300),Cmd);
-	console.log('|  Loaded\x1b[31m',Cmd.name,`\x1b[2m[\x1b[0m\x1b[31m${C}\x1b[2m]\x1b[0m`)
+	var Cmd=require(PATH),C=PATH.split('/').reverse()[1];Cmd.category=C;client.commands.set(Util.random(300),Cmd)
+	console.log('|	loaded',Util.color.blue(Cmd.name),`[${Util.color.red(C)}]`)
 })
 console.log('|---------------------------------------|')
 // Command Handler //
@@ -68,14 +55,13 @@ var DATA:any={
 	cpu:cpu,
 	cdl:cld,
 	exec:exec,
-	axios:axios,
-	embed:{}
+	axios:axios
 }
 // DATA //
 
 // Evenets //
 client.on('ready',()=>{
-	console.log('Ready on',`\x1b[31m${client.user.tag}\x1b[0m`)
+	console.log(Util.color.red('discord.js'),'processes started')
 })
 client.on('interactionCreate',async(int:any)=>{
 	if(int.isCommand()){

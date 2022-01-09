@@ -8,20 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var path = require('path');
-var { Client, Collection, BitField } = require('discord.js');
-var Config = require('./config.js');
-var client = new Client(Config.Bot);
-var slash = [];
-var { REST } = require('@discordjs/rest');
-var { Routes } = require('discord-api-types/v9');
-var rest = new REST({ version: '9' }).setToken(process.env.token);
-var DisTube = require('distube');
-var Util = require('./Util');
-var glob = require('glob');
-var axios = require('axios');
-var cld = require('child_process'), exec = (data) => __awaiter(void 0, void 0, void 0, function* () { return yield cld.execSync(data); });
-var os = require('os'), cpu = os.cpus()[0];
+var path = require('path'), { Client, Collection, BitField } = require('discord.js'), Config = require('./config.js'), client = new Client(Config.Bot), slash = [], { REST } = require('@discordjs/rest'), { Routes } = require('discord-api-types/v9'), rest = new REST({ version: '9' }).setToken(process.env.token), DisTube = require('distube'), Util = require('./Util'), glob = require('glob'), axios = require('axios'), cld = require('child_process'), exec = (data) => __awaiter(void 0, void 0, void 0, function* () { return yield cld.execSync(data); }), os = require('os'), cpu = os.cpus()[0];
 require('./express')();
 client.database = require('./database.js');
 client.db = {
@@ -46,7 +33,7 @@ console.log('|----------------[Slash]----------------|');
 glob.sync(path.join(__dirname, '/slash') + '/**/*.js').forEach((PATH) => {
     var Slash = require(PATH);
     client.slash.set(Slash.data.name, Slash);
-    console.log('|  Loaded\x1b[31m', Slash.data.name, `\x1b[2m[\x1b[0m\x1b[31m${PATH.split('/').reverse()[1]}\x1b[2m]\x1b[0m`);
+    console.log('|	loaded', Util.color.blue(Slash.data.name), `[${Util.color.red(PATH.split('/').reverse()[1])}]`);
     slash.push(Slash.data.toJSON());
 });
 console.log('|---------------------------------------|');
@@ -56,7 +43,7 @@ glob.sync(path.join(__dirname, '/commands') + '/**/*.js').forEach((PATH) => {
     var Cmd = require(PATH), C = PATH.split('/').reverse()[1];
     Cmd.category = C;
     client.commands.set(Util.random(300), Cmd);
-    console.log('|  Loaded\x1b[31m', Cmd.name, `\x1b[2m[\x1b[0m\x1b[31m${C}\x1b[2m]\x1b[0m`);
+    console.log('|	loaded', Util.color.blue(Cmd.name), `[${Util.color.red(C)}]`);
 });
 console.log('|---------------------------------------|');
 var DATA = {
@@ -68,11 +55,10 @@ var DATA = {
     cpu: cpu,
     cdl: cld,
     exec: exec,
-    axios: axios,
-    embed: {}
+    axios: axios
 };
 client.on('ready', () => {
-    console.log('Ready on', `\x1b[31m${client.user.tag}\x1b[0m`);
+    console.log(Util.color.red('discord.js'), 'processes started');
 });
 client.on('interactionCreate', (int) => __awaiter(void 0, void 0, void 0, function* () {
     if (int.isCommand()) {
