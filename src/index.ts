@@ -1,5 +1,5 @@
 // Imports //
-var path=require('path'),{Client,Collection,BitField}=require('discord.js'),Config=require('./config.js'),client=new Client(Config.Bot),slash:any=[],{REST}=require('@discordjs/rest'),{Routes}=require('discord-api-types/v9'),rest=new REST({version:'9'}).setToken(process.env.token),DisTube=require('distube'),Util=require('./Util'),glob=require('glob'),axios:any=require('axios'),cld:any=require('child_process'),exec:any=async(data:string)=>await cld.execSync(data),os:any=require('os'),cpu:any=os.cpus()[0]
+var path=require('path'),{Client,Collection,BitField}=require('discord.js'),Config=require('./config.js'),client=new Client(Config.Bot),slash:any=[],{REST}=require('@discordjs/rest'),{Routes}=require('discord-api-types/v9'),rest=new REST({version:'9'}).setToken(process.env.token),DisTube=require('distube'),Util=require('./Util'),glob=require('glob'),axios:any=require('axios'),cld:any=require('child_process'),exec:any=async(data:string)=>(await cld.execSync(data)).toString(),os:any=require('os'),cpu:any=os.cpus()[0]
 require('./express')()
 // Imports //
 
@@ -21,8 +21,10 @@ client.db={
 }
 // DataBase //
 
+// Collections //
 client.distube=new DisTube.default(client,Config.DisTube)
 client.cache=new Collection()
+// Collections //
 
 // Slash Handler //
 client.slash=new Collection()
@@ -39,7 +41,9 @@ console.log('|---------------------------------------|')
 client.commands=new Collection()
 console.log('\n|---------------[Command]---------------|')
 glob.sync(path.join(__dirname,'/commands')+'/**/*.js').forEach((PATH:any)=>{
-	var Cmd=require(PATH),C=PATH.split('/').reverse()[1];Cmd.category=C;client.commands.set(Util.random(300),Cmd)
+	var Cmd=require(PATH),C=PATH.split('/').reverse()[1]
+	Cmd.category=C
+	client.commands.set(Util.random(300),Cmd)
 	console.log('|	loaded',Util.color.blue(Cmd.name),`[${Util.color.red(C)}]`)
 })
 console.log('|---------------------------------------|')
