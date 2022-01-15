@@ -16,7 +16,7 @@ module.exports={
 			}
 			if(Cmd.aliases)embed.fields.push({name:'Aliases',value:`\`\`\`\n${d.util.firstUpper(Cmd.aliases.join(', '))}\`\`\``})
 			if(Cmd.fields)embed.fields.push({name:'Fields',value:`\`\`\`\n${Cmd.fields.map((f:any)=>`${d.util.firstUpper(f.name)} | ${f.opt?'Not Required':'Required'}\n`)}\`\`\``})
-		}else if(matchs?.length>0||matchs?.length!==undefined){
+		}else if(matchs?.length>0&&matchs?.length!==undefined){
 			var embed:any={
 				title:`${d.emotes.lappy} | Help >> Coincidences`,
 				thumbnail:{url:d.author.displayAvatarURL({dynamic:!0,size:4096})},
