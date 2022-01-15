@@ -42,6 +42,31 @@ var makeError=(
 }
 // MakeError //
 
+// MakeEmbed //
+var makeEmbed=(
+	d:any,
+	title:string, 
+	desc:string='', 
+	fields:any=[], 
+	thumb:any=d.author.displayAvatarURL({dynamic:!0,size:4096}), 
+	color:string='#001' 
+)=>{
+	return{
+		title:title,
+		description:desc, 
+		thumbnail:{url:thumb},
+		fields:fields, 
+		color:color
+	}
+}
+// MakeEmbed //
+
+// MakeFields //
+var makeFields=(...fields:any)=>{
+	return fields.map((f:any)=>{return{name:f[0],value:f[1],inline:f[2]||!1}})
+}
+// MakeFields //
+
 // Reboot //
 var reboot=()=>{try{console.log('\n|--------------[Rebooting]--------------|\n');process.on('exit',()=>{require('child_process').spawn(process.argv.shift(),process.argv,{cwd:process.cwd(),detached:!0,stdio:'inherit'})});process.exit();}catch(error){console.log(error)}}
 // Reboot //
@@ -71,5 +96,7 @@ module.exports={
 	findMember:(d:any,target:any,guild:any=d.guild)=>{target=target.toLowerCase();return guild.members.cache.find((m:any)=>m.id===target||m.username.toLoweCase()===target||m.username.toLoweCase()+'#'+m.discriminator===target)},
 	randomUpperCase:randomUpperCase,
 	firstUpper,
-	color
+	color, 
+	makeEmbed,
+	makeFields
 }
