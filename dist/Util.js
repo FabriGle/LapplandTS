@@ -29,6 +29,18 @@ var makeError = (d, description, type, color = '#001', avatar = d.author.display
         color: color
     };
 };
+var makeEmbed = (d, title, desc = '', fields = [], thumb = d.author.displayAvatarURL({ dynamic: !0, size: 4096 }), color = '#001') => {
+    return {
+        title: title,
+        description: desc,
+        thumbnail: { url: thumb },
+        fields: fields,
+        color: color
+    };
+};
+var makeFields = (...fields) => {
+    return fields.map((f) => { return { name: f[0], value: f[1], inline: f[2] || !1 }; });
+};
 var reboot = () => { try {
     console.log('\n|--------------[Rebooting]--------------|\n');
     process.on('exit', () => { require('child_process').spawn(process.argv.shift(), process.argv, { cwd: process.cwd(), detached: !0, stdio: 'inherit' }); });
@@ -65,5 +77,7 @@ module.exports = {
     findMember: (d, target, guild = d.guild) => { target = target.toLowerCase(); return guild.members.cache.find((m) => m.id === target || m.username.toLoweCase() === target || m.username.toLoweCase() + '#' + m.discriminator === target); },
     randomUpperCase: randomUpperCase,
     firstUpper,
-    color
+    color,
+    makeEmbed,
+    makeFields
 };

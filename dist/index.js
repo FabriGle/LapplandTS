@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var path = require('path'), { Client, Collection, BitField } = require('discord.js'), Config = require('./config.js'), client = new Client(Config.Bot), slash = [], { REST } = require('@discordjs/rest'), { Routes } = require('discord-api-types/v9'), rest = new REST({ version: '9' }).setToken(process.env.token), DisTube = require('distube'), Util = require('./Util'), glob = require('glob'), axios = require('axios'), cld = require('child_process'), exec = (data) => __awaiter(void 0, void 0, void 0, function* () { return yield cld.execSync(data); }), os = require('os'), cpu = os.cpus()[0];
+var path = require('path'), { Client, Collection, BitField } = require('discord.js'), Config = require('./config.js'), client = new Client(Config.Bot), slash = [], { REST } = require('@discordjs/rest'), { Routes } = require('discord-api-types/v9'), rest = new REST({ version: '9' }).setToken(process.env.token), DisTube = require('distube'), Util = require('./Util'), glob = require('glob'), axios = require('axios'), cld = require('child_process'), exec = (data) => __awaiter(void 0, void 0, void 0, function* () { return (yield cld.execSync(data)).toString(); }), os = require('os'), cpu = os.cpus()[0];
 require('./express')();
 client.database = require('./database.js');
 client.db = {

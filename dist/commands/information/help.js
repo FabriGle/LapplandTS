@@ -30,7 +30,7 @@ module.exports = {
             if (Cmd.fields)
                 embed.fields.push({ name: 'Fields', value: `\`\`\`\n${Cmd.fields.map((f) => `${d.util.firstUpper(f.name)} | ${f.opt ? 'Not Required' : 'Required'}\n`)}\`\`\`` });
         }
-        else if ((matchs === null || matchs === void 0 ? void 0 : matchs.length) > 0 || (matchs === null || matchs === void 0 ? void 0 : matchs.length) !== undefined) {
+        else if ((matchs === null || matchs === void 0 ? void 0 : matchs.length) > 0 && (matchs === null || matchs === void 0 ? void 0 : matchs.length) !== undefined) {
             var embed = {
                 title: `${d.emotes.lappy} | Help >> Coincidences`,
                 thumbnail: { url: d.author.displayAvatarURL({ dynamic: !0, size: 4096 }) },

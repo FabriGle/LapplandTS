@@ -20,7 +20,7 @@ module.exports = {
         var Start = Date.now(), axios = require('axios'), dsc = require('discord.js'), http = require('http'), https = require('https'), fs = require('fs'), path = require('path'), cld = require('child_process'), exec = (data) => __awaiter(void 0, void 0, void 0, function* () { return yield cld.execSync(data); }), os = require('os'), cpu = os.cpus()[0], x = null, y = null, z = null, str = new String(), arr = new Array(), obj = new Object(), num = new Number();
         var evaled = 'undefined', depth = 0, embed = {}, ne = d.args.includes('--noembed');
         try {
-            ne ? (d.removeArg('--noembed'), evaled = eval(`(async()=>${d.str_args})()`)) : evaled = yield eval(`(async()=>${d.str_args})()`);
+            ne ? (d.removeArg('--noembed'), evaled = yield eval(`(async()=>${d.str_args})()`)) : evaled = yield eval(`(async()=>${d.str_args})()`);
         }
         catch (error) {
             var embedError = d.util.makeError(d, `Reason: ${error.message}`, error.name);
