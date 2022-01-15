@@ -13,6 +13,10 @@ module.exports={
 			embed=d.util.makeError(d,'field 1 [\'song\'] cannot be empty','field')
 			return d.msg.reply({embeds:[embed]})
 		}
-		d.distube.play(d.msg,d.str_args)
+		d.distube.play(d.member.voice.channel,d.str_args,{
+			member:d.member,
+			textChannel:d.channel,
+			message:d.msg
+		})
 	}
 }
