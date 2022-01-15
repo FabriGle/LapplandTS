@@ -11,7 +11,7 @@ module.exports={
 		var evaled:any='undefined',depth:number=0,embed:any={},ne:boolean=d.args.includes('--noembed')
 
 		try{
-      ne?(d.removeArg('--noembed'),evaled=eval(`(async()=>${d.str_args})()`)):evaled=await eval(`(async()=>${d.str_args})()`)
+      ne?(d.removeArg('--noembed'),evaled=await eval(`(async()=>${d.str_args})()`)):evaled=await eval(`(async()=>${d.str_args})()`)
     } catch (error){
 			var embedError:any=d.util.makeError(d,`Reason: ${error.message}`,error.name)
 			var row={
