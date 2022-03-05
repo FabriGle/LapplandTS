@@ -1,14 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var random = (max, min = 1, decimals = false) => decimals ? Math.random() * (max - min) + min : Math.round(Math.random() * (max - min)) + min;
 var firstUpper = (str) => str.split(' ').map((word) => word.split('').map((char, index) => index === 0 ? char.toUpperCase() : char).join('')).join(' ');
 var randomUpperCase = (str) => str.split('').map((char) => random(2) == 2 ? char.toLowerCase() : char.toUpperCase()).join('');
 var pad = (n, z = 2) => ('00' + n).slice(-z);
@@ -17,8 +7,8 @@ var removeItem = (array, item) => { var i = array.indexOf(item); if (i !== -1)
     return array.splice(i, 1); };
 var makeError = (d, description, type, color = '#001', avatar = d.author.displayAvatarURL({ dynamic: true, size: 4096 })) => {
     if (!d.suppressUpperCase) {
-        type = firstUpper(type);
-        description = firstUpper(description);
+        type = type?.fup();
+        description = description?.fup();
     }
     return {
         title: `${d.emotes.error} | Error ${type ? `>> ${type}` : ''}`,
@@ -31,16 +21,17 @@ var makeError = (d, description, type, color = '#001', avatar = d.author.display
 };
 var makeEmbed = (d, title, desc = '', fields = [], thumb = d.author.displayAvatarURL({ dynamic: !0, size: 4096 }), color = '#001') => {
     return {
-        title: title,
+        title,
         description: desc,
         thumbnail: { url: thumb },
-        fields: fields,
-        color: color
+        fields,
+        color
     };
 };
 var makeFields = (...fields) => {
     return fields.map((f) => { return { name: f[0], value: f[1], inline: f[2] || !1 }; });
 };
+var codeblock = (str, n = '') => '```' + n + '\n' + str + '```';
 var reboot = () => { try {
     console.log('\n|--------------[Rebooting]--------------|\n');
     process.on('exit', () => { require('child_process').spawn(process.argv.shift(), process.argv, { cwd: process.cwd(), detached: !0, stdio: 'inherit' }); });
@@ -60,24 +51,139 @@ var color = {
     white: (str) => `\x1b[0m\x1b[37m${str}\x1b[0m`,
     custom: (str, n) => `\x1b[0m\x1b[${n}m${str}\x1b[0m`,
 };
+var type = (x) => {
+    var t = typeof x;
+    if (t === 'object') {
+        if (Array.isArray(x)) {
+            t = 'array';
+        }
+        else if (Buffer.isBuffer(x)) {
+            t = 'buffer';
+        }
+        else if (x === null) {
+            t = 'null';
+        }
+        else if (x === undefined) {
+            t = 'undefined';
+        }
+        else
+            t = 'object';
+    }
+    return t;
+};
+var { SlashCommandSubcommandBuilder } = require('@discordjs/builders');
+var subCmdParser = (data) => {
+    var slash = new SlashCommandSubcommandBuilder()
+        .setName(data.name)
+        .setDescription(data.desc);
+    if (data.opts) {
+        data.opts.forEach((opt, i) => {
+            switch (opt.type) {
+                case 'str':
+                    slash.addStringOption((_) => {
+                        _.setName(opt.name);
+                        _.setRequired(opt.req || !1);
+                        _.setDescription(opt.desc);
+                        return _;
+                    });
+                    break;
+                case 'bool':
+                    slash.addBooleanOption((_) => {
+                        _.setName(opt.name);
+                        _.setRequired(opt.req || !1);
+                        _.setDescription(opt.desc);
+                        return _;
+                    });
+                    break;
+                case 'ch':
+                    slash.addChannelOption((_) => {
+                        _.setName(opt.name);
+                        _.setRequired(opt.req || !1);
+                        _.setDescription(opt.desc);
+                        if (opt.chTypes) {
+                            _.addChannelTypes(opt.chTypes);
+                        }
+                        return _;
+                    });
+                    break;
+                case 'int':
+                    slash.addIntegerOption((_) => {
+                        _.setName(opt.name);
+                        _.setRequired(opt.req || !1);
+                        _.setDescription(opt.desc);
+                        _.setMinValue(opt.min);
+                        _.setMaxValue(opt.max);
+                        return _;
+                    });
+                    break;
+                case 'mention':
+                    slash.addMentionableOption((_) => {
+                        _.setName(opt.name);
+                        _.setRequired(opt.req || !1);
+                        _.setDescription(opt.desc);
+                        return _;
+                    });
+                    break;
+                case 'user':
+                    slash.addUserOption((_) => {
+                        _.setName(opt.name);
+                        _.setRequired(opt.req || !1);
+                        _.setDescription(opt.desc);
+                        return _;
+                    });
+                    break;
+                case 'role':
+                    slash.addRoleOption((_) => {
+                        _.setName(opt.name);
+                        _.setRequired(opt.req || !1);
+                        _.setDescription(opt.desc);
+                        return _;
+                    });
+                    break;
+                case 'num':
+                    slash.addNumberOption((_) => {
+                        _.setName(opt.name);
+                        _.setRequired(opt.req || !1);
+                        _.setDescription(opt.desc);
+                        _.setMinValue(opt.min);
+                        _.setMaxValue(opt.max);
+                        return _;
+                    });
+                    break;
+                default:
+                    opt.description = opt.desc;
+                    opt.required = opt.req;
+                    slash.options[i] = opt;
+                    break;
+            }
+        });
+    }
+    return slash;
+};
 module.exports = {
-    random,
+    random: globalThis.random,
     msToTime,
     removeItem,
     makeError,
     snowflake: (n = 10) => { var str = ''; for (; n > 0;)
         str = str + (Math.round(Math.random() * 8)), n--; return str; },
     reboot,
-    findUser: (d, target) => __awaiter(void 0, void 0, void 0, function* () { target = target.toLowerCase(); try {
-        return ((yield d.client.users.cache.find((m) => (m === null || m === void 0 ? void 0 : m.username.toLowerCase()) === target || (m === null || m === void 0 ? void 0 : m.tag.toLowerCase()) === target)) || (yield d.client.users.cache.get(target)) || (yield d.msg.mentions.users.first()) || (yield d.client.users.fetch(target)) || { id: undefined });
+    findUser: async (d, target) => { target = target.toLowerCase(); try {
+        return (await d.client.users.cache.find((m) => m?.username.toLowerCase() === target || m?.tag.toLowerCase() === target) || await d.client.users.cache.get(target) || await d.msg.mentions.users.first() || (await d.client.users.fetch(target)) || { id: undefined });
     }
-    catch (_a) {
+    catch {
         return { id: undefined };
-    } }),
+    } },
     findMember: (d, target, guild = d.guild) => { target = target.toLowerCase(); return guild.members.cache.find((m) => m.id === target || m.username.toLoweCase() === target || m.username.toLoweCase() + '#' + m.discriminator === target); },
-    randomUpperCase: randomUpperCase,
+    randomUpperCase,
     firstUpper,
     color,
     makeEmbed,
-    makeFields
+    makeFields,
+    codeblock,
+    avatar: (u, opt = { s: 2048, d: !0 }) => u.displayAvatarURL({ size: opt.s, dynamic: opt.d }),
+    type,
+    subCmdParser,
+    wait: (ms) => new Promise((r) => setTimeout(r, ms)),
+    getStatus: (url) => axios.get(url).then((r) => r.status).catch((e) => e.response ? e.response.status : e)
 };

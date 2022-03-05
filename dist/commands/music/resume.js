@@ -10,13 +10,14 @@ module.exports = {
         }
         if (!d.queue) {
             embed = d.util.makeError(d, 'There is nothing playing!', 'queue');
+            return d.msg.reply({ embeds: [embed] });
         }
         try {
             d.queue.resume();
-            return d.mdg.reply('queue resumed');
+            return d.msg.reply('queue resumed');
         }
-        catch (_a) {
-            embed = d.util.makeError(d, 'Can\'t pause the queue', 'queue');
+        catch {
+            embed = d.util.makeError(d, 'Can\'t resume the queue', 'queue');
             return d.msg.reply({ embeds: [embed] });
         }
     }

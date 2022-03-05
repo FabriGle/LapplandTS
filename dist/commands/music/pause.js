@@ -15,7 +15,7 @@ module.exports = {
             d.queue.pause();
             return d.msg.reply('songs are paused');
         }
-        catch (_a) {
+        catch {
             embed = d.util.makeError(d, 'Can\'t pause the queue', 'queue');
             return d.msg.reply({ embeds: [embed] });
         }

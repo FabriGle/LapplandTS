@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
     data: new SlashCommandBuilder()
@@ -25,12 +16,12 @@ module.exports = {
         .setName('noembed')
         .setDescription('If the code will not be returned in embed')
         .setRequired(false)),
-    run: (d) => __awaiter(void 0, void 0, void 0, function* () {
+    run: async (d) => {
         if (d.int.user.id !== '788869971073040454')
             return d.int.reply({ content: 'This command is for my developers only', ephemeral: !0 });
         var evaled = 'undefined', depth = 0, embed = {};
         try {
-            evaled = yield eval(d.int.options.getString('code'));
+            evaled = await eval(d.int.options.getString('code'));
         }
         catch (error) {
             var embedError = d.util.makeError(d, `Reason: ${error.message}`, error.name, '#001', d.int.user.displayAvatarURL({ dynamic: true, size: 4096 }));
@@ -80,5 +71,5 @@ module.exports = {
             embeds: [embed],
             ephemeral: d.int.options.getBoolean('ephemeral') || false
         });
-    })
+    }
 };

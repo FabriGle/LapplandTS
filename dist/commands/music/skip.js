@@ -1,17 +1,8 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 module.exports = {
     name: 'skip',
     desc: 'skip to the next song',
-    run: (d) => __awaiter(void 0, void 0, void 0, function* () {
+    run: async (d) => {
         var embed = {};
         if (!d.member.voice.channel) {
             embed = d.util.makeError(d, 'u must be in a voice channel!', 'voice');
@@ -19,10 +10,11 @@ module.exports = {
         }
         if (!d.queue) {
             embed = d.util.makeError(d, 'There is nothing playing!', 'queue');
+            return d.msg.reply({ embeds: [embed] });
         }
         try {
-            var song = yield d.queue.skip();
-            d.message.reply({
+            var song = await d.queue.skip();
+            var msg = await d.msg.reply({
                 embeds: [{
                         title: 'Skipped',
                         thumbnail: { url: song.thumbnail },
@@ -30,10 +22,11 @@ module.exports = {
                         color: '#001'
                     }]
             });
+            setTimeout(() => msg.delete(), 6000);
         }
         catch (error) {
             embed = d.util.makeError(d, error.message);
             return d.msg.reply({ embeds: [embed] });
         }
-    })
+    }
 };

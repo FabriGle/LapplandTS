@@ -17,7 +17,7 @@ module.exports = {
             a = `**Joined:** <t:${Math.floor(member.joinedTimestamp / 1000)}:R>`;
         }
         embed.title = `${user.username + '#' + user.discriminator} Information`;
-        embed.description = `**Nick:** \`${(member === null || member === void 0 ? void 0 : member.nickname) || user.username}\`
+        embed.description = `**Nick:** \`${member?.nickname || user.username}\`
 **Id:** \`${user.id}\`
 **Is Bot:** ${user.bot ? 'Yes' : 'No'}${a ? '\n' + a : ''}
 

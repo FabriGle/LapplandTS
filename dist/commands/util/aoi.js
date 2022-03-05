@@ -1,27 +1,24 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 module.exports = {
     name: 'aoi',
     aliases: ['aoijs', 'aoi.js'],
     desc: 'returns information from aoi.js functions',
     fields: [{ name: 'function', opt: !1 }],
     options: [{ name: 'list', desc: 'returns a list of matches' }],
-    run: (d) => __awaiter(void 0, void 0, void 0, function* () {
+    run: async (d) => {
         if (!d.str_args) {
             var embedError = d.util.makeError(d, 'field 1 [\'function\'] cannot be empty', 'field');
             return d.msg.reply({ embeds: [embedError] });
         }
+        var _status = await util.getStatus('https://api.leref.ga');
+        if (_status !== 200) {
+            var e = util.makeError(d, 'Error requesting data from API', _status);
+            return d.msg.reply({ embeds: [e] });
+        }
         if (d.str_args.includes('--list')) {
-            yield d.removeArg('--list');
-            var Funcs = (yield d.axios.default.request({ url: 'https://api.leref.ga/functions/' + d.args[0], method: 'GET' })).data.data.filter((F) => F.name.includes(d.args[0])), arr = [], n = (d.args[1] || 1) - 1, total = Funcs.length;
+            await d.removeArg('--list');
+            var Funcs = (await axios.default.request({ url: 'https://api.leref.ga/functions/' + d.args[0], method: 'GET' })).data.data
+                .filter((F) => F.name.includes(d.args[0])), arr = [], n = (d.args[1] || 1) - 1, total = Funcs.length;
             Funcs.map((f, i) => {
                 if (i > 10)
                     return;
@@ -58,5 +55,5 @@ module.exports = {
                 return d.msg.reply({ embeds: [embedError] });
             });
         }
-    })
+    }
 };
