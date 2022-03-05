@@ -10,8 +10,10 @@ module.exports={
 		}
 		if(!d.queue){
 			embed=d.util.makeError(d,'There is nothing playing!','queue')
+			return d.msg.reply({embeds:[embed]})
 		}
 		
 		d.queue.stop()
+		return d.msg.reply('Leaving voice channel')
 	}
 }

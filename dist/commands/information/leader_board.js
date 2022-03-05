@@ -4,13 +4,18 @@ module.exports = {
     aliases: ['lb'],
     desc: 'Returns a leader board',
     run: async (d) => {
-        var all = (await d.client.db.all()).filter((v) => v.key.startsWith('GLOBAL_XP_')).sort((x, y) => x.data.value.level - y.data.value.level), arr = '';
-        all = all.slice(all.length - 10).reverse();
-        all.forEach(async (k, i) => {
-            var u = await d.util.findUser(d, k.key.split('_')[2]), msg = `**${i + 1}.** \`${u.username + '#' + u.discriminator}\`: LvL${k.data.value.level} - ${k.data.value.current_xp}/${k.data.value.req_xp}`;
-            console.log(msg);
-            arr += msg;
-        });
-        return d.msg.reply({ embeds: [d.util.makeEmbed(d, d.emotes.feli + ' | Global leader board', arr)] });
+        var all = (await d.client.db.all())
+            .filter((v) => v.key.startsWith('GLOBAL_XP_'))
+            .sort((x, y) => x.data.value.level - y.data.value.level);
+        let arr = new Array(), i = 0;
+        for (var _ of all) {
+            console.log(_);
+            i++;
+            var u = await util.findUser(d, _.key.split('_')[2]);
+            var m = `**${i}.** \`${u.username + '#' + u.discriminator}\`: LvL${_.data.value.level} - ${_.data.value.current_xp}/${_.data.value.req_xp}`;
+            arr.push(msg);
+        }
+        ;
+        return d.msg.reply({ embeds: [d.util.makeEmbed(d, d.emotes.feli + ' | Global leader board', arr.join('\n'))] });
     }
 };

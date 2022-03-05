@@ -161,19 +161,21 @@ var subCmdParser = (data) => {
     return slash;
 };
 module.exports = {
-    random: globalThis.random,
     msToTime,
     removeItem,
     makeError,
     snowflake: (n = 10) => { var str = ''; for (; n > 0;)
-        str = str + (Math.round(Math.random() * 8)), n--; return str; },
+        str = str + (Math.round(random() * 8)), n--; return str; },
     reboot,
-    findUser: async (d, target) => { target = target.toLowerCase(); try {
-        return (await d.client.users.cache.find((m) => m?.username.toLowerCase() === target || m?.tag.toLowerCase() === target) || await d.client.users.cache.get(target) || await d.msg.mentions.users.first() || (await d.client.users.fetch(target)) || { id: undefined });
-    }
-    catch {
-        return { id: undefined };
-    } },
+    findUser: async (d, target) => {
+        target = target.tlc();
+        try {
+            return (await d.client.users.cache.find((m) => m?.username.toLowerCase() === target || m?.tag.toLowerCase() === target) || await d.client.users.cache.get(target) || await d.msg.mentions.users.first() || (await d.client.users.fetch(target)) || { id: undefined });
+        }
+        catch {
+            return { id: void 0 };
+        }
+    },
     findMember: (d, target, guild = d.guild) => { target = target.toLowerCase(); return guild.members.cache.find((m) => m.id === target || m.username.toLoweCase() === target || m.username.toLoweCase() + '#' + m.discriminator === target); },
     randomUpperCase,
     firstUpper,

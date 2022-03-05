@@ -9,9 +9,15 @@ module.exports={
 			var embedError=d.util.makeError(d,'field 1 [\'function\'] cannot be empty','field')
 			return d.msg.reply({embeds:[embedError]})
 		}
+		var _status=await util.getStatus('https://api.leref.ga')
+		if(_status!==200){
+			var e = util.makeError(d,'Error requesting data from API',_status);
+			return d.msg.reply({embeds:[e]});
+		}
 		if(d.str_args.includes('--list')){
 			await d.removeArg('--list')
-			var Funcs=(await d.axios.default.request({url:'https://api.leref.ga/functions/'+d.args[0],method:'GET'})).data.data.filter((F:any)=>F.name.includes(d.args[0])),arr:any=[],n:any=(d.args[1]||1)-1,total:number=Funcs.length
+			var Funcs=(await axios.default.request({url:'https://api.leref.ga/functions/'+d.args[0],method:'GET'})).data.data
+				.filter((F:any)=>F.name.includes(d.args[0])),arr:any=[],n:any=(d.args[1]||1)-1,total:number=Funcs.length
 
 			Funcs.map((f:any,i:any)=>{
 				if(i>10)return

@@ -11,10 +11,8 @@ module.exports={
 			var embedError=d.util.makeError(d,'user [\''+d.str_args+'\'] not found','not found')
 			return d.msg.reply({embeds:[embedError]})
 		}
-
-		d.embed.title=`${user.username+'#'+user.discriminator} Icon`
-		d.embed.image={url:user.displayAvatarURL({dynamic:!0,size:4096})}
-		d.embed.color='#001'
-		d.msg.reply({embeds:[d.embed]})
+		var embed=d.util.makeEmbed(d,`${user.username+'#'+user.discriminator} Icon`)
+		embed.image={url:user.displayAvatarURL({dynamic:!0,size:4096})}
+		d.msg.reply({embeds:[embed]})
 	}
 }

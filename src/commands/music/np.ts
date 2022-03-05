@@ -9,7 +9,8 @@ module.exports={
 			return d.msg.reply({embeds:[embed]})
 		}
 		if(!d.queue){
-			embed=d.util.makeError(d,'There is nothing playing!','queue')
+			embed=d.util.makeError(d,'There is nothing playing!','queue');
+			return d.msg.reply({embeds:[embed]})
 		}
 		var song=d.queue.songs[0]
 

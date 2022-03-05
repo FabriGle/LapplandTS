@@ -10,6 +10,7 @@ module.exports={
 		}
 		if(!d.queue){
 			embed=d.util.makeError(d,'There is nothing playing!','queue')
+			return d.msg.reply({embeds:[embed]})
 		}
 
 		if(d.args[0]){
